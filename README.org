@@ -1,0 +1,100 @@
+#+TITLE: Guerilla LegalTech, or, the Unix Hacker's Guide to SME Legal
+
+Spreadsheets empower business people to work with numbers. At a certain point, you might hire an accounting professional, but there's a lot you can do on your own.
+
+Similarly, "Guerilla LegalTech" empowers business people to solve simple, common problems in legal, without having to hire a lawyer.
+
+We introduce a set of open-source tools aimed at these problems. Paired with practices that ought to be familiar to any working programmer, these tools should enable a technically adept individual to cope with a range of legal challenges that might arise in the course of running a small business.
+
+* Download
+
+/See here for installation instructions./
+
+* Case Studies
+
+** Basic Contract Document Assembly
+
+A large class of legal problems boil down to "Alice needs to sign document A, then Bob needs to sign document B, then Carol needs to sign document C."
+
+The contents of the documents are formulaic and can be produced from templates. Same goes for the dependency relationships between documents; who has to sign what first? This is a build tree, like a Makefile.
+
+The dependencies can be computed, given "this is where we are today" and "that is where we want to be."
+
+In this case study we show how a command-line script calls an API to generate the documents that need to be signed. The input is JSON, and the output is a set of PDFs. The dependency graph is rendered as a GraphViz dot file. An optional web service helps to shepherd the signing procedure through an integration with Adobe EchoSign. Or you can herd the cats yourself.
+
+** Basic Contract Document Management
+
+After PDFs have been signed, they typically hang out in a folder, gathering dust for years before someone looks at them. Typically, they are reviewed in a hurry, with a specific question in mind.
+- "When does our supplier contract expire?"
+- "Some event has happened -- what do we need to do now?"
+- "We want to do such-and-such -- are we allowed to do that?"
+
+Sometimes the documents have been through several rounds of amendment or novation. The job of reading them all and manually computing the latest "resultant" typically falls to some junior staff, or a grumpy senior staff who feels like there ought to be a better way.
+
+This case study presents the better way.
+
+The command-line tool shown here is able to compute the latest, current snapshot. It also can compute the state of affairs at any given point in the past. We introduce some theory from temporal databases.
+
+* Principles and Problems
+
+** Many legal challenges are problems in information systems.
+
+Hillel Wayne identified [[https://www.hillelwayne.com/post/crossover-project/what-we-can-learn/#version-control][version control]] as something software people take for granted, but is badly needed in other fields. The case study above illustrates this point.
+
+** Some legal challenges are problems in computer science.
+
+- Planning :: "How do I get there from here?" isn't just for Google Maps. You can think of a fundraising as a complicated sequence of moves in a game whose rules are found in company law and in corporate constitutions.
+- Testing :: "We only really care about six specific scenarios. In each case, are we covered?" Programmers are used to writing test suites to automate the process of confirming that the latest round of edits didn't break anything.
+- Model Checking :: "We care that in every possible scenario, certain conditions will not be violated." An investor might want to jealously guard their anti-dilution rights; if a startup inadvertently proceeds with a fundraising, some procedural safeguard needs to kick in.
+  
+* Out Of Scope
+
+In this version of Guerilla LegalTech, we do not tackle text or contract analytics.
+
+In a future version, we might show how an existing corpus of contracts could be read by software, to produce a first cut of the metadata and logic. This first cut needs to be reviewed by a human, because current analytics software measures its accuracy in the 80% to 90% range. Google Translate might get you directionns to the toilet, and GPT-3 might be able to write a short poem, but I wouldn't want to put my signature on a contract that came out of that kind of machine-learning AI.
+
+* Context and Landscape
+
+* Roadmap
+
+** Step 1: Metadata in PDFs
+
+Names, address, dollar amounts, dates: the most basic data elements used to "fill in the blanks" in a contract template. We call them "data parameters" and we record them in JSON.
+
+That JSON travels into the PDF via XMP. Just as JPEGs contain EXIF, PDFs can contain XMP. Your basic key/value dictionary of metadata, riding alongside the black-and-white of the PDF, in an invisible sidecar layer.
+
+** Step 2: Logic in PDFs
+
+Equipping PDFs with data parameters is an important step, but it's only the first half of the puzzle.
+
+The second: the "moving parts", the "business logic" of a contract. When something happens, I have to do this, you have to do that, and the deadlines are calculated based on such-and-such.
+
+In programming, this is a familiar dichotomy: programs are made of /data structures/ (arrays, key/value dictionaries, graphs) and /control structures/ (if-then-else, for loops, event and exception handlers).
+
+We think of business contracts as very high-level programs -- so high, they are "specifications" more than they are "implementations". L4 is a domain-specific language for law designed to represent the business logic of contracts in the same way that SQL is a DSL for databases, designed to represent the relational logic of large data sets.
+
+We show how the moving parts of a contract can be represented in L4 and embedded in a PDF.
+
+** Step 3: Information Management
+
+Now we have a folder full of augmented PDFs. We would call them "smart contracts", except that term is already taken.
+
+What can we do with these PDFs? We can query them and extract useful things. You can think of these contracts as NoSQL data objects, living free, outside the bounds of a traditional database: they carry their structure around with them.
+
+You can integrate these contracts with an existing enterprise information system. In the future, we can imagine adapters being written for environments like SAP, Tibco, and MuleSoft.
+
+** Step 4: Advanced Analytics
+
+The sky's the limit.
+
+* FAQ
+
+** How does this interact with existing Contract Analytics systems?
+
+Dozens of LegalTech startups aim to help enterprises make sense of their inbound contracts.
+
+In the open-source world, see [[https://www.reddit.com/r/MachineLearning/comments/m2w7hv/n_legal_nlp_dataset_with_over_13000_anotations/][The Atticus Project]].
+
+These startups are part of the larger [[https://en.wikipedia.org/wiki/Contract_lifecycle_management][Contract Lifecycle Management]] industry: vendors promise to help large enterprises track contract expirations, deliverables, amendments, and other details, typically in a database of some sort.
+
+PDF extraction software is one plausible source for metadata augmentation.
