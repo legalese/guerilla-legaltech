@@ -4,11 +4,23 @@ Spreadsheets empower business people to work with numbers. At a certain point, y
 
 Similarly, "Guerilla LegalTech" empowers business people to solve simple, common problems in legal, without having to hire a lawyer.
 
-We introduce a set of open-source tools aimed at these problems. Paired with practices that ought to be familiar to any working programmer, these tools should enable a technically adept individual to cope with a range of legal challenges that might arise in the course of running a small business.
+We introduce a set of open-source tools, together dubbed "GLT", which are aimed at these problems.
+
+Paired with practices that ought to be familiar to any working programmer, GLT enables a technically adept individual to cope with a range of legal challenges that might arise in the course of running a small business.
+
+* Inspiration
+
+#+begin_quote
+When I work as a lawyer, I *hate* my tools: MS Word, PDF, Outlook, Zoom, etc.
+
+When I work as a software developer, I *love* my tools: VS Code, React, Ember, GitHub, Tailwind, zsh, Heroku, Hyper, Vercel, etc.
+
+[[https://twitter.com/solirvine/status/1284754521894162432][Sol Irvine, July 19, 2020]]
+#+end_quote
 
 * Download
 
-/See here for installation instructions./
+Under construction: /See here for installation instructions./
 
 * Case Studies
 
@@ -47,11 +59,29 @@ Hillel Wayne identified [[https://www.hillelwayne.com/post/crossover-project/wha
 - Testing :: "We only really care about six specific scenarios. In each case, are we covered?" Programmers are used to writing test suites to automate the process of confirming that the latest round of edits didn't break anything.
 - Model Checking :: "We care that in every possible scenario, certain conditions will not be violated." An investor might want to jealously guard their anti-dilution rights; if a startup inadvertently proceeds with a fundraising, some procedural safeguard needs to kick in.
   
+** Users are wary of putting sensitive contracts into a cloud SaaS platform.
+
+Cloud SaaS is everywhere nowadays. It has become the dominant mode of enterprise software delivery. But many SaaS LegalTech vendors face an adoption challenge: "our contracts are governed by NDAs, and could be considered the crown jewels of our company; they contain secrets which could be very damaging if leaked."
+
+What's the alternative? On-prem software, licensed by the seat, and sold expensively by corporate account managers.
+
+Ok, what's the /other/ alternative?
+
+The Unix philosophy puts the user in control: small pieces loosely joined, a text-file orientation, few monolithic services, nothing proprietary.
+
+** The PDF is the new text file.
+
+For over fifty years Unix has treated text files as the universal format, a /lingua franca/. Anyone can whip up a little shell or Python script to add a transformation to a command pipeline. Anyone can =cat= and =grep= a plain text file.
+
+Over time, variants of this form have emerged. Structured data often shows up as JSON, easily wrangled by the CLI script [[https://www.npmjs.com/package/json][json]]. Powershell cmdlets work on objects. But the idea of a common format, easily marshalled to and from storage, easily handled by little programs, is eternal.
+
+In legal world, PDFs are the ubiquitous document format. Importantly, they contain electronic signatures. But they aren't quite a text file: it's hard to read anything useful out of them, especially at the command line. Turning PDFs back into text feels a bit like unscrambling an egg.
+
+The solution: [[https://github.com/smucclaw/complaw/tree/xmp/doc/ex-xmp-20200808/xmp][xmpjson]], part of the Guerilla LegalTech suite.
+
 * Out Of Scope
 
-In this version of Guerilla LegalTech, we do not tackle text or contract analytics.
-
-In a future version, we might show how an existing corpus of contracts could be read by software, to produce a first cut of the metadata and logic. This first cut needs to be reviewed by a human, because current analytics software measures its accuracy in the 80% to 90% range. Google Translate might get you directionns to the toilet, and GPT-3 might be able to write a short poem, but I wouldn't want to put my signature on a contract that came out of that kind of machine-learning AI.
+In this version of Guerilla LegalTech, we do not tackle text or contract analytics. See the FAQ below.
 
 * Context and Landscape
 
@@ -91,10 +121,16 @@ The sky's the limit.
 
 ** How does this interact with existing Contract Analytics systems?
 
-Dozens of LegalTech startups aim to help enterprises make sense of their inbound contracts.
+Dozens of LegalTech startups aim to help enterprises make sense of their inbound contracts, by applying natural language processing and machine-learning AI techniques to text analytics.
 
 In the open-source world, see [[https://www.reddit.com/r/MachineLearning/comments/m2w7hv/n_legal_nlp_dataset_with_over_13000_anotations/][The Atticus Project]].
 
-These startups are part of the larger [[https://en.wikipedia.org/wiki/Contract_lifecycle_management][Contract Lifecycle Management]] industry: vendors promise to help large enterprises track contract expirations, deliverables, amendments, and other details, typically in a database of some sort.
+Such extraction software is one plausible source for metadata augmentation.
 
-PDF extraction software is one plausible source for metadata augmentation.
+In a future version, we might show how an existing corpus of contracts could be read by software, to produce a first cut of the metadata and logic. This first cut needs to be reviewed by a human, because current analytics software measures its accuracy in the 80% to 90% range. Google Translate might get you directionns to the toilet, and GPT-3 might be able to write a short poem, but I wouldn't want to put my signature on a contract that came out of that kind of machine-learning AI.
+
+** Does this count as Contract Lifecycle Management?
+
+In the larger [[https://en.wikipedia.org/wiki/Contract_lifecycle_management][Contract Lifecycle Management]] industry, vendors promise to help large enterprises track contract expirations, deliverables, amendments, and other details, typically in a database of some sort.
+
+Guerilla LegalTech is an attempt to offer similar capabilities to the lower end of the market.
